@@ -1,5 +1,5 @@
 #! /bin/bash
-CONF="/home/daniil/Scripts/mail.conf"
+CONF="mail.conf"
 if [[ -f $CONF ]]; then
 	source "$CONF"
 	echo "Почта пользователя: $user_email"
@@ -41,8 +41,7 @@ libCheckFunc "timeshift"
 
 while true; do
 
-	echo -e "${BLUE_BACKGROUND}${WHITE_TEXT}"
-	viu  --width 40 -x 20 -y 1  /home/daniil/Загрузки/Raphtalia.full.2571370.png
+	viu  --width 60 -x 15 -y 1  logo.jpg
 
 cat << "EOF"
   _      _                                _        _                _                
