@@ -15,3 +15,7 @@ cd Scripts
 chmod +x script.sh
 ./script.sh 
 ```
+# [Script features](#script-features)
+
+- All standard timeshift features, including scheduled backups using cron
+- Email notifications with reminders and notifications about creating a backup
