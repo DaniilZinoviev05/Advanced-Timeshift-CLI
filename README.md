@@ -26,6 +26,7 @@ https://github.com/DaniilZinoviev05/Console-interface-timeshift/releases/tag/v1.
 
 ## Make executable and run
 ```
+chmod +x script.desktop
 chmod +x script.sh
 ./script.sh 
 ```
