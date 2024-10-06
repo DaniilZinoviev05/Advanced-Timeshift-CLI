@@ -6,10 +6,17 @@
 # [How to install](#how-to-install)
 
 ## Copy the project
+
 ``` 
 git clone https://github.com/DaniilZinoviev05/Console-interface-timeshift.git
 cd Scripts
 ```
+or
+
+```
+https://github.com/DaniilZinoviev05/Console-interface-timeshift/releases/tag/v1.0.0
+```
+
 ## Make executable and run
 ```
 chmod +x script.sh
