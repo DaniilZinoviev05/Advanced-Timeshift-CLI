@@ -31,7 +31,7 @@ EOF
 	echo -e "$(timeshift --version)\n"
 	
 	{
-		echo -e "| 1 -  Бэкапы | 2 - Настройки | 3  - Выход |"
+		echo -e "| 1 -  Бэкапы | 2 - Настройки | 3  - Запустить timeshift | 4 - Выход |"
 	} | toilet -f term -F border --gay
 
 	read -p "Введите действие: " action
@@ -124,6 +124,9 @@ EOF
 		
 	;;
 	3)
+		sudo timeshift-gtk
+	;;
+	4)
 		exit
 	::
 	esac
