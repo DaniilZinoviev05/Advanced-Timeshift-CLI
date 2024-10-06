@@ -45,25 +45,6 @@ CheckConfDistroFunc() {
 	fi	
 }
 
-CheckConfLangFunc() {
-	EXPECTED_ENTRY="user_lang"
-
-	if [[ -f $CONF ]]; then
-		echo "$CONF file found / Файл $CONF найден"
-	  
-		if grep -q "$EXPECTED_ENTRY" "$CONF"; then
-			echo "The $EXPECTED_ENTRY entry was found in the file / Запись $EXPECTED_ENTRY найдена в файле"
-			LANG=$user_lang
-		else
-			echo "The $EXPECTED_ENTRY entry was not found in the file / Запись $EXPECTED_ENTRY не найдена в файле"
-			read -p "Enter language / Введите язык(en - english, ru - russian): " LANG 
-			echo "user_lang=\"$LANG\"" >>  $CONF 
-		fi
-	else
-		echo "$CONF file not found / Файл $CONF не найден"
-	fi	
-}
-
 createShortcut() {
 	EXPECTED_ENTRY1="Exec"
 	EXPECTED_ENTRY2="Icon"
@@ -98,8 +79,6 @@ CheckConfMailFunc
 echo "---------------------------------------------------------------------------"
 CheckConfDistroFunc
 echo "---------------------------------------------------------------------------"
-CheckConfLangFunc
-echo "---------------------------------------------------------------------------"
 createShortcut
 echo "---------------------------------------------------------------------------"
 
@@ -107,4 +86,3 @@ echo -e "\e[32mYour settings / Ваши настройки\e[0m"
 
 echo $EMAIL
 echo $DISTRO
-echo $LANG

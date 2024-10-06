@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ###
-PACKAGES="timeshift grub-btrfs cronie viu mailutils mailx"  
+PACKAGES="timeshift grub-btrfs cronie viu mailutils mailx toilet"  
 USER=$(whoami)
 ###
 #echo "Текущий пользователь: $USER"
