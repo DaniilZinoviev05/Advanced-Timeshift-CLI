@@ -1,47 +1,24 @@
 #! /bin/bash
-CONF="mail.conf"
-if [[ -f $CONF ]]; then
-	source "$CONF"
-	echo "Почта пользователя: $user_email"
-fi
-current_user=$(whoami)
-echo "$current_user ALL=(ALL) NOPASSWD: /usr/bin/timeshift" | sudo EDITOR='tee -a' visudo
 
-libCheckFunc() {
-	if ! command -v "$1" &> /dev/null; then
-		answer=${answer:-y} 
-		if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
-			install_library "$1"
-		else
-			echo "$1 не установлен! Программа может работать некорректно или не работать вовсе!"
-		fi
-	fi
-}
+###
+echo "---------------------------------------------------------------------------"
+echo "Установим необходимы пакеты..."
+source packages.sh
+echo "---------------------------------------------------------------------------"
+###
+echo "---------------------------------------------------------------------------"
+echo "Произведем настройку..."
+source settings.sh
+echo "---------------------------------------------------------------------------"
+###
 
-CheckConfMailFunc() {
-	EXPECTED_ENTRY='user_email'
-
-	if [[ -s $CONF ]]; then
-		echo "Файл $CONF найден."
-	  
-	if grep -q "$EXPECTED_ENTRY" "$CONF"; then
-		echo "Запись $EXPECTED_ENTRY найдена в файле."
-		EMAIL=$user_email
-	else
-		echo "Запись $EXPECTED_ENTRY не найдена в файле."
-		read -p "Введите почту: " EMAIL
-		echo "user_email=\"$EMAIL\"" > mail.conf
-	fi
-	else
-		echo "Файл $CONF не найден."
-	fi	
-}
-
-libCheckFunc "timeshift" 
+toilet -f future --width 40 --filter border "Пример"
+toilet -f standard --width 10 "Пример" | lolcat -p 2.0 -F 0.5
+toilet -f standard --width 12 "Пример" | lolcat -p 2.0 -F 0.5
 
 while true; do
 
-	viu  --width 60 -x 15 -y 1  logo.jpg
+	viu  --width 60 -x 13 -y 1  logo.jpg
 
 cat << "EOF"
   _      _                                _        _                _                
@@ -54,6 +31,7 @@ cat << "EOF"
 	                                                                      |_|   
 EOF
 
+	(whoami)
 	timeshift --version
 
 	echo -e "\n1 - Создать бэкап" 
@@ -106,7 +84,7 @@ EOF
 					(crontab -l 2>/dev/null; echo "$minute $hour * $month $day sudo timeshift --create --comments \"$comment\"") | crontab -  
 					if [[ -f $CONF ]]; then
 						source "$CONF"
-						(crontab -l 2>/dev/null; echo "$minute $hour * $month $day echo "Бэкап \"$comment\" успешно создан." | mailx -s "BACKUP-REPORT" "$user_email"") | crontab -  
+						(crontab -l 2>/dev/null; echo "$minute $hour * $month $day echo "Бэкап \"$comment\" успешно создан." | mailx -s "BACKUP-REPORT" "$EMAIL"") | crontab -  
 					fi
 				;;
 									
@@ -129,9 +107,6 @@ EOF
 		
 		6) 
 			clear
-			libCheckFunc "mailutils" 
-			libCheckFunc "mailx" 
-			CheckConfMailFunc
 		;;
 		
 		7) 
