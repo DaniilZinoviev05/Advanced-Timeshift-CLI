@@ -7,9 +7,8 @@
 # [Example:create backup](#create-backup)
 
 <div align="center">
-  <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2pvNXI4ZHdmZTNxZXU4anZ2NDJyNmVmbzhtcnphMXZpaWw5dG90cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7BcROBphzoJQZP1yDP/giphy.gif" alt="example"/>
+  <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXBzdXNnMjNwamRwY3dkdWg1MmtlZTV4MDN2bXo1bzA1eGU2eHl3MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/6WjLFORjvmoZEHOQNi/giphy.gif" alt="example"/>
 </div>
-
 
 # [How to install](#how-to-install)
 
