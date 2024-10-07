@@ -14,7 +14,8 @@
 
 ## Copy the project
 
-``` 
+```
+cd ~
 git clone https://github.com/DaniilZinoviev05/Console-interface-timeshift.git
 cd Scripts
 ```
