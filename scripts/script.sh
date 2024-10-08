@@ -1,7 +1,11 @@
 #! /bin/bash
 
 ### 
-CONF="/$(pwd)/../setgs.conf"
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+echo $SCRIPT_DIR
+CONF="$(realpath "$SCRIPT_DIR/../setgs.conf")"
+echo $CONF
+echo "$(realpath "$SCRIPT_DIR/..")"
 ###
 echo -e "\e[36m####################################################################################\e[0m"
 
@@ -14,7 +18,7 @@ cat << "EOF"
 EOF
 
 echo "Install the required packages / Установим необходимы пакеты..."
-source /$(pwd)/packages.sh
+source $SCRIPT_DIR/packages.sh
 ###
 echo -e "\e[36m####################################################################################\e[0m"
 
@@ -26,7 +30,7 @@ cat << "EOF"
 
 EOF
 
-source /$(pwd)/settings.sh
+source $SCRIPT_DIR/settings.sh
 echo -e "\e[36m####################################################################################\e[0m"
 ###
 
@@ -36,7 +40,7 @@ createBackupFunc() {
 	echo -e "En: \e[34mHere you can create a snapshot that will be automatically added to grub.\e[0m"
 	echo -e "Ru: \e[34mЗдесь Вы можете создать снимок системы, который сразу добавится в grub.\e[0m\n"
 	echo -e "\e[32m| 1 - Move on to create / Перейти к созданию\e[0m\n"
-	echo -e "\e[32m| 2 - Back / Назад\n\e[0m\n"
+	echo -e "\e[34m| 2 - Back / Назад\n\e[0m\n"
 	read -p "Enter value / Введите действие: " sub_action
 
 	case $sub_action in
@@ -54,7 +58,6 @@ createBackupFunc() {
 		echo -e "\e[31mInvalid value / Некорректный ввод \e[0m"
 	;;
 	esac
-	break
 }
 
 restoreBackupFunc() {
@@ -62,7 +65,7 @@ restoreBackupFunc() {
 	echo -e "En: \e[34mHere you can restore your system.\e[0m"
 	echo -e "Ru: \e[34mЗдесь Вы можете восстановить систему.\e[0m\n"
 	echo -e "\e[32m| 1 - Move on to restore / Перейти к восстановлению системы\e[0m\n"
-	echo -e "\e[32m| 2 - Back / Назад\n\e[0m\n"
+	echo -e "\e[34m| 2 - Back / Назад\n\e[0m\n"
 	read -p "Enter value / Введите действие: " sub_action
 
 	case $sub_action in
@@ -88,7 +91,7 @@ autoBackupFunc() {
 	echo -e "Ru: \e[34mЗдесь Вы можете настроить бэкапы по расписанию.\e[0m\n"
 	echo -e "\e[32m| 1 - Create autobackup / Создать автобэкап\e[0m\n" 
 	echo -e "\e[32m| 2 - Clear autobackups / Очистить бэкапы по расписанию\e[0m\n" 
-	echo -e "\e[32m| 3 - Back / Назад\n\e[0m\n"
+	echo -e "\e[34m| 3 - Back / Назад\n\e[0m\n"
 	read -p "Enter value / Введите действие: " sub_action
 	case $sub_action in
 		1)
@@ -115,6 +118,7 @@ autoBackupFunc() {
 		;;
 							
 		2)
+			clear
 			echo -e "\n\e[34m### \e[32mCOMMANDS IN CRON(Script delete this commands)\e[0m / \e[32mКОМАНДЫ CRON(Скрипт удалит команды снизу)\e[34m ###\e[0m\n"
 			echo -e "\e[31m$(sudo crontab -l)\e[0m"
 			echo -e "\e[34m#################################################################################################\e[0m\n"
@@ -140,7 +144,7 @@ deleteBackupFunc() {
 	echo -e "En: \e[34mHere you can delete your backup.\e[0m"
 	echo -e "Ru: \e[34mЗдесь Вы можете удалить бэкап.\e[0m\n"
 	echo -e "\e[32m| 1 - Move on to delete / Перейти к удалению\e[0m\n"
-	echo -e "\e[32m| 2 - Back / Назад\n\e[0m\n"
+	echo -e "\e[34m| 2 - Back / Назад\n\e[0m\n"
 	read -p "Enter value / Введите действие: " sub_action
 
 	case $sub_action in
@@ -152,13 +156,52 @@ deleteBackupFunc() {
 		read -p "Enter backup name (name! Not comment!) / Введите название бэкапа (из поля name, не комментарий!): " name
 		sudo timeshift --delete --snapshot $name
 	;;
-	2) 
+	2)
 		break
 	;;
 	*)
-		echo -e "\e[31mInvalid value / Некорректный ввод \e[0m"
+		clear
+		echo -e "\n\e[31m(-_-)/ |Incorrect value / Неправильный ввод|\e[0m"
+		break
 	;;
 	esac
+}
+
+changeEmailFunc() {
+	clear
+	EXPECTED_ENTRY="user_email"
+
+	if [[ -f $CONF ]]; then
+		echo -e "\n########################################################"
+		echo "$CONF file found / Файл $CONF найден"
+
+		if grep -q "^$EXPECTED_ENTRY=" "$CONF"; then
+			echo "The $EXPECTED_ENTRY entry was found in the file / Запись $EXPECTED_ENTRY найдена в файле"
+
+			read -p "Enter email / Введите email:" EMAIL
+			echo "Updating the $EXPECTED_ENTRY entry with the new value / Обновление записи $EXPECTED_ENTRY новым значением"
+
+			sudo sed -i "s/^$EXPECTED_ENTRY=.*/$EXPECTED_ENTRY=\"$EMAIL\"/" "$CONF"
+
+			echo "Entry updated / Запись обновлена"
+		else
+			echo "Entry $EXPECTED_ENTRY not found in the file / Запись $EXPECTED_ENTRY не найдена в файле"
+		fi
+	else
+		echo "$CONF file not found / Файл $CONF не найден"
+	fi
+	echo -e "########################################################\n"
+}
+
+deleteScriptFunc() {
+	clear
+	sudo mv /usr/share/applications/script.desktop "$(realpath "$SCRIPT_DIR/..")"
+	sudo mv "$(realpath "$SCRIPT_DIR/../timeshift-gtk.desktop")"  /usr/share/applications/
+	echo -e "\n\e[34mAfter 10 seconds the script will be deleted \_(-_-)  / Через 10 секунд скрипт будет удален \_(-_-)\e[0m\n"
+	echo -e "\e[31m! Will be deleted / Будет удален: "$(realpath "$SCRIPT_DIR/..")"\e[0m\n"
+	sleep 10
+	#cd ~
+	#sudo rm -rf "$(realpath "$SCRIPT_DIR/..")"
 }
 ######################################
 
@@ -184,11 +227,11 @@ echo -e "\e[0m"
 	echo -e "\e[32m\n| 1 - Backups / Бэкапы\n\e[0m"
 	echo -e "\e[32m| 2 - Settings / Настройки\n\e[0m"
 	echo -e "\e[32m| 3 - Run / Запустить timeshift\n\e[0m"
-	echo -e "\e[32m| 4 - Exit / Выход\n\e[0m\n"
+	echo -e "\e[34m| 4 - Exit / Выход\n\e[0m\n"
 	read -p "Enter value / Введите действие: " action
 	
 	while true; do
-	case $action in
+		case $action in
 		1) 
 			clear
 			echo -e "\e[32m\n| 1 - Create backup / Создать бэкап\n\e[0m"
@@ -196,7 +239,7 @@ echo -e "\e[0m"
 			echo -e "\e[32m| 3 - Restore system / Восстановить систему\n\e[0m"
 			echo -e "\e[32m| 4 - Set up auto backups / Настроить автобэкапы\n\e[0m"
 			echo -e "\e[32m| 5 - Delete backup / Удалить бэкап\n\e[0m"
-			echo -e "\e[32m| 6 - Back / Назад\n\e[0m\n"
+			echo -e "\e[34m| 6 - Back / Назад\n\e[0m\n"
 			read -p "Enter value / Введите действие: " sub_action
 			
 				case $sub_action in
@@ -230,50 +273,42 @@ echo -e "\e[0m"
 			esac
 		;;
 		2)
-			echo -e "\n1 - Change email / Изменить почту"
-			echo -e "2 - Delete script / Удалить скрипт\n"
-			read -p "Введите действие: " action
-			case $action in
-				1)
-					EXPECTED_ENTRY="user_email"
-
-					if [[ -f $CONF ]]; then
-						echo "$CONF file found / Файл $CONF найден"
-
-						if grep -q "^$EXPECTED_ENTRY=" "$CONF"; then
-							echo "The $EXPECTED_ENTRY entry was found in the file / Запись $EXPECTED_ENTRY найдена в файле"
-
-							read -p "Enter email / Введите email:" EMAIL
-							echo "Updating the $EXPECTED_ENTRY entry with the new value / Обновление записи $EXPECTED_ENTRY новым значением"
-
-							sudo sed -i "s/^$EXPECTED_ENTRY=.*/$EXPECTED_ENTRY=\"$EMAIL\"/" "$CONF"
-
-							echo "Entry updated / Запись обновлена"
-						else
-							echo "Entry $EXPECTED_ENTRY not found in the file / Запись $EXPECTED_ENTRY не найдена в файле"
-						fi
-					else
-						echo "$CONF file not found / Файл $CONF не найден"
-					fi
-				;;
-				2)
-					###
-				;;
-				*)
-					echo "Incorrect value / Неверный ввод, попробуйте снова."
-					break
-				;;
+			clear
+			echo -e "\n\e[32m| 1 - Change Email / Изменить почту\n\e[0m"
+			echo -e "\e[32m| 2 - Delete script / Удалить скрипт\n\e[0m"
+			echo -e "\e[34m| 3 - Back / Назад\n\e[0m\n"
+			read -p "Enter value / Введите действие: " settings_action
+			case $settings_action in
+			1)
+				changeEmailFunc
+			;;
+			2)
+				deleteScriptFunc	
+			;;
+			3)
+				clear
+				break
+			;;
+			*)
+				clear
+				echo -e "\n\e[31m(-_-)/ |Incorrect value / Неправильный ввод|\e[0m"
+				break
+			;;
 			esac
 		;;
 		3)
-			sudo timeshift-gtk
 			clear
+			sudo timeshift-gtk
 			break
 		;;
 		4)
 			exit
-		::
+		;;
+		*)
+			clear
+			echo -e "\n\e[31m(-_-)/ |Incorrect value / Неправильный ввод|\e[0m"
+			break
+		;;
 		esac
-		done
-	
+	done
 done 

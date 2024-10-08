@@ -1,11 +1,16 @@
 #! /bin/bash
 
-CONF="/home/$(whoami)/Scripts/setgs.conf"
+###
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+CONF="$(realpath "$SCRIPT_DIR/../setgs.conf")"
+###
+
 if [[ -f $CONF ]]; then
 	source "$CONF"
 	echo "User email / Почта пользователя: $user_email"
 fi
 
+####### SETTINGS FUNCTIONS ##########
 CheckConfMailFunc() {
 	EXPECTED_ENTRY="user_email"
 
@@ -50,29 +55,30 @@ createShortcut() {
 	EXPECTED_ENTRY2="Icon"
 	EXPECTED_ENTRY3="Terminal"
 	echo "$(whoami) ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
-	SHORTCUT="/home/$(whoami)/Scripts/script.desktop"
+	SHORTCUT="$(pwd)/../script.desktop"
 	if [[ -f $SHORTCUT ]]; then
 		echo "$SHORTCUT file found / Файл $SHORTCUT найден"
-	  
+		
 		if grep -q "$EXPECTED_ENTRY1" "$SHORTCUT" || grep -q "$EXPECTED_ENTRY2" "$SHORTCUT" || grep -q "$EXPECTED_ENTRY3" "$SHORTCUT"; then
 			echo "The entry was found in the file / Записи найдены в файле"
 		else
-			sudo chown $(whoami) /home/daniil/Scripts/script.desktop
+			sudo chown $(whoami) $(pwd)
 			echo "The entry was not found in the file / Запись не найдена в файле"
-			echo "Exec=/home/$(whoami)/Scripts/scripts/script.sh" >> $SHORTCUT 
-			echo "Icon=/home/$(whoami)/Scripts/logo.jpg" >> $SHORTCUT
+			echo "Exec=$(pwd)/script.sh" >> $SHORTCUT 
+			echo "Icon=$(realpath "$SCRIPT_DIR/../logo.jpg")" >> $SHORTCUT
 			echo "Terminal=true" >> $SHORTCUT
 		fi
 		
 		chmod +x $SHORTCUT
 		sudo mv $SHORTCUT /usr/share/applications/
-		sudo mv /usr/share/applications/timeshift-gtk.desktop $SHORTCUT/.. 
+		sudo mv /usr/share/applications/timeshift-gtk.desktop $(pwd)/../
 		echo "Shortcut created / Ярлык создан"
 	else
 		echo " .desktop file does not exist or has it already been created / Для ярлыка не найден соответствующий файл или ярлык уже был создан"
 	fi
 	sudo rm /etc/sudoers.d/$(whoami)
 }
+#############################################
 
 echo "---------------------------------------------------------------------------"
 CheckConfMailFunc
