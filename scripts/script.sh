@@ -1,7 +1,10 @@
 #! /bin/bash
 
 ### 
-CONF="/$(pwd)/../setgs.conf"
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+echo $SCRIPT_DIR
+CONF="$(realpath "$SCRIPT_DIR/../setgs.conf")"
+echo $CONF
 ###
 echo -e "\e[36m####################################################################################\e[0m"
 
@@ -14,7 +17,7 @@ cat << "EOF"
 EOF
 
 echo "Install the required packages / Установим необходимы пакеты..."
-source /$(pwd)/packages.sh
+source $SCRIPT_DIR/packages.sh
 ###
 echo -e "\e[36m####################################################################################\e[0m"
 
@@ -26,7 +29,7 @@ cat << "EOF"
 
 EOF
 
-source /$(pwd)/settings.sh
+source $SCRIPT_DIR/settings.sh
 echo -e "\e[36m####################################################################################\e[0m"
 ###
 
@@ -115,6 +118,7 @@ autoBackupFunc() {
 		;;
 							
 		2)
+			clear
 			echo -e "\n\e[34m### \e[32mCOMMANDS IN CRON(Script delete this commands)\e[0m / \e[32mКОМАНДЫ CRON(Скрипт удалит команды снизу)\e[34m ###\e[0m\n"
 			echo -e "\e[31m$(sudo crontab -l)\e[0m"
 			echo -e "\e[34m#################################################################################################\e[0m\n"
