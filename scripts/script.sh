@@ -1,6 +1,6 @@
 #! /bin/bash
 
-### 
+###
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 echo $SCRIPT_DIR
 CONF="$(realpath "$SCRIPT_DIR/../setgs.conf")"
@@ -11,7 +11,7 @@ echo -e "\e[36m#################################################################
 
 cat << "EOF"
 ▗▄▄▖  ▗▄▖  ▗▄▄▖▗▖ ▗▖ ▗▄▖  ▗▄▄▖▗▄▄▄▖ ▗▄▄▖
-▐▌ ▐▌▐▌ ▐▌▐▌   ▐▌▗▞▘▐▌ ▐▌▐▌   ▐▌   ▐▌   
+▐▌ ▐▌▐▌ ▐▌▐▌   ▐▌▗▞▘▐▌ ▐▌▐▌   ▐▌   ▐▌
 ▐▛▀▘ ▐▛▀▜▌▐▌   ▐▛▚▖ ▐▛▀▜▌▐▌▝▜▌▐▛▀▀▘ ▝▀▚▖
 ▐▌   ▐▌ ▐▌▝▚▄▄▖▐▌ ▐▌▐▌ ▐▌▝▚▄▞▘▐▙▄▄▖▗▄▄▞▘
 
@@ -24,9 +24,9 @@ echo -e "\e[36m#################################################################
 
 cat << "EOF"
  ▗▄▄▖▗▄▄▄▖▗▄▄▄▖▗▄▄▄▖▗▄▄▄▖▗▖  ▗▖ ▗▄▄▖ ▗▄▄▖
-▐▌   ▐▌     █    █    █  ▐▛▚▖▐▌▐▌   ▐▌   
+▐▌   ▐▌     █    █    █  ▐▛▚▖▐▌▐▌   ▐▌
  ▝▀▚▖▐▛▀▀▘  █    █    █  ▐▌ ▝▜▌▐▌▝▜▌ ▝▀▚▖
-▗▄▄▞▘▐▙▄▄▖  █    █  ▗▄█▄▖▐▌  ▐▌▝▚▄▞▘▗▄▄▞▘                                          
+▗▄▄▞▘▐▙▄▄▖  █    █  ▗▄█▄▖▐▌  ▐▌▝▚▄▞▘▗▄▄▞▘
 
 EOF
 
@@ -51,7 +51,7 @@ createBackupFunc() {
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 		break
 	;;
-	2) 
+	2)
 		break
 	;;
 	*)
@@ -76,7 +76,7 @@ restoreBackupFunc() {
 		sudo timeshift --restore --snapshot $name
 		break
 	;;
-	2) 
+	2)
 		break
 	;;
 	*)
@@ -89,8 +89,8 @@ autoBackupFunc() {
 	clear
 	echo -e "En: \e[34mHere you can create autobackups.\e[0m"
 	echo -e "Ru: \e[34mЗдесь Вы можете настроить бэкапы по расписанию.\e[0m\n"
-	echo -e "\e[32m| 1 - Create autobackup / Создать автобэкап\e[0m\n" 
-	echo -e "\e[32m| 2 - Clear autobackups / Очистить бэкапы по расписанию\e[0m\n" 
+	echo -e "\e[32m| 1 - Create autobackup / Создать автобэкап\e[0m\n"
+	echo -e "\e[32m| 2 - Clear autobackups / Очистить бэкапы по расписанию\e[0m\n"
 	echo -e "\e[34m| 3 - Back / Назад\n\e[0m\n"
 	read -p "Enter value / Введите действие: " sub_action
 	case $sub_action in
@@ -107,7 +107,7 @@ autoBackupFunc() {
 			    echo "Incorrect time / Некорректное время."
 			    exit 1
 			fi
-			
+
 			crontab -l > cron
 			(crontab -l 2>/dev/null; echo "$minute $hour * $month $day sudo timeshift --create --comments \"$comment\"") >> cron
 			(crontab -l 2>/dev/null; echo "$minute $hour * $month $day sudo grub-mkconfig -o /boot/grub/grub.cfg") >> cron
@@ -116,7 +116,7 @@ autoBackupFunc() {
 			rm cron
 			break
 		;;
-							
+
 		2)
 			clear
 			echo -e "\n\e[34m### \e[32mCOMMANDS IN CRON(Script delete this commands)\e[0m / \e[32mКОМАНДЫ CRON(Скрипт удалит команды снизу)\e[34m ###\e[0m\n"
@@ -131,7 +131,7 @@ autoBackupFunc() {
 			sleep 10
 			break
 		;;
-		
+
 	       *)
 	       		echo "Incorrect value / Неверный ввод, попробуйте снова."
 	       		break
@@ -210,29 +210,29 @@ while true; do
 echo -e "\e[32m"
 
 cat << "EOF"
-  _      _                                _        _                _                
- | |    (_)                              | |      | |              | |               
- | |     _ _ __  _   ___  __   __ _ _   _| |_ ___ | |__   __ _  ___| | ___   _ _ __  
- | |    | | '_ \| | | \ \/ /  / _` | | | | __/ _ \| '_ \ / _` |/ __| |/ / | | | '_ \ 
+  _      _                                _        _                _
+ | |    (_)                              | |      | |              | |
+ | |     _ _ __  _   ___  __   __ _ _   _| |_ ___ | |__   __ _  ___| | ___   _ _ __
+ | |    | | '_ \| | | \ \/ /  / _` | | | | __/ _ \| '_ \ / _` |/ __| |/ / | | | '_ \
  | |____| | | | | |_| |>  <  | (_| | |_| | || (_) | |_) | (_| | (__|   <| |_| | |_) |
- |______|_|_| |_|\__,_/_/\_\  \__,_|\__,_|\__\___/|_.__/ \__,_|\___|_|\_\\__,_| .__/ 
-	                                                                      | |    
-	                                                                      |_|   
+ |______|_|_| |_|\__,_/_/\_\  \__,_|\__,_|\__\___/|_.__/ \__,_|\___|_|\_\\__,_| .__/
+	                                                                      | |
+	                                                                      |_|
 EOF
 
 echo -e "\e[0m"
 
 	echo -e "\n\e[33mUser:\e[0m $(whoami) \e[34m|\e[0m \e[33mTimeshift:\e[0m $(timeshift --version)"
-	
+
 	echo -e "\e[32m\n| 1 - Backups / Бэкапы\n\e[0m"
 	echo -e "\e[32m| 2 - Settings / Настройки\n\e[0m"
 	echo -e "\e[32m| 3 - Run / Запустить timeshift\n\e[0m"
 	echo -e "\e[34m| 4 - Exit / Выход\n\e[0m\n"
 	read -p "Enter value / Введите действие: " action
-	
+
 	while true; do
 		case $action in
-		1) 
+		1)
 			clear
 			echo -e "\e[32m\n| 1 - Create backup / Создать бэкап\n\e[0m"
 			echo -e "\e[32m| 2 - View backups / Посмотреть бэкапы\n\e[0m"
@@ -241,32 +241,32 @@ echo -e "\e[0m"
 			echo -e "\e[32m| 5 - Delete backup / Удалить бэкап\n\e[0m"
 			echo -e "\e[34m| 6 - Back / Назад\n\e[0m\n"
 			read -p "Enter value / Введите действие: " sub_action
-			
+
 				case $sub_action in
-				1) 
+				1)
 					createBackupFunc
 				;;
 
-				2) 
+				2)
 					clear
 					echo -e "\e[34m################################## \e[32mBACKUPS\e[0m / \e[32mБЭКАПЫ\e[34m ##################################\e[0m"
 					sudo timeshift --list
 					echo -e "\e[34m#####################################################################################\e[0m"
 					break
 				;;
-				
-				3) 
+
+				3)
 					restoreBackupFunc
 				;;
-				
-				4) 
+
+				4)
 					autoBackupFunc
 				;;
-				5) 
+				5)
 					deleteBackupFunc
 				;;
-				
-				6) 
+
+				6)
 					clear
 					break
 				;;
@@ -283,7 +283,7 @@ echo -e "\e[0m"
 				changeEmailFunc
 			;;
 			2)
-				deleteScriptFunc	
+				deleteScriptFunc
 			;;
 			3)
 				clear
@@ -311,4 +311,4 @@ echo -e "\e[0m"
 		;;
 		esac
 	done
-done 
+done
