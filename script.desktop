@@ -3,6 +3,3 @@ Version=1.0
 Type=Application
 Name=Timeshift
 Comment=Console interface Timeshift(grub auto update)
-Exec=/home/daniil/Загрузки/console-timeshift/scripts/script.sh
-Icon=/home/daniil/Загрузки/console-timeshift/logo.jpg
-Terminal=true
